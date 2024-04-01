@@ -76,17 +76,6 @@ const ListItem = ({ item, index, deleteProduct }) => {
                             <Text style={styles.textStyle}>Delete</Text>
                         </EasyButton>
 
-                        <EasyButton
-                            medium
-                            danger
-                            onPress={() => {
-                                deleteOrder(item.id); // Call the delete function with the product ID
-                            }}
-                        >
-                            <Text style={styles.textStyle}>Delete</Text>
-                        </EasyButton>
-
-
                     </View>
                 </View>
             </Modal>
