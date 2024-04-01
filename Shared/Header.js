@@ -2,18 +2,18 @@ import React from "react"
 import { StyleSheet, Image, SafeAreaView, View } from "react-native"
 
 const Header = () => {
-    return (
-        //<View style={styles.header}>
-        <SafeAreaView style={styles.header}>
-            <Image
-                source={require("../assets/Logo.png")}
-                resizeMode="contain"
-                style={{ height: 10 }}
-            />
+    // return (
+    //     //<View style={styles.header}>
+    //     <SafeAreaView style={styles.header}>
+    //         <Image
+    //             source={require("../assets/Logo.png")}
+    //             resizeMode="contain"
+    //             style={{ height: 10 }}
+    //         />
 
-        </SafeAreaView>
-        //</View>
-    )
+    //     </SafeAreaView>
+    //     //</View>
+    // )
 }
 
 const styles = StyleSheet.create({

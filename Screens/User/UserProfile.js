@@ -1,5 +1,5 @@
 import React, { useContext, useState, useCallback } from 'react';
-import { View, Text, ScrollView, Button, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, Button, StyleSheet, Image } from 'react-native';
 import { Container } from "native-base"
 import { useFocusEffect, useNavigation } from "@react-navigation/native"
 
@@ -11,7 +11,6 @@ import baseURL from "../../assets/common/baseurl"
 import AuthGlobal from "../../Context/Store/AuthGlobal"
 import { logoutUser } from "../../Context/Actions/Auth.actions"
 import OrderCard from '../../Shared/OrderCard';
-
 
 const UserProfile = (props) => {
     const context = useContext(AuthGlobal)
@@ -61,6 +60,12 @@ const UserProfile = (props) => {
     return (
         <Container style={styles.container}>
             <ScrollView contentContainerStyle={styles.subContainer}>
+                {userProfile && userProfile.image ? (
+                    <Image
+                        source={{ uri: userProfile.image }}
+                        style={styles.profileImage}
+                    />
+                ) : null}
                 <Text style={{ fontSize: 30 }}>
                     {userProfile ? userProfile.name : ""}
                 </Text>
@@ -72,7 +77,7 @@ const UserProfile = (props) => {
                         Phone: {userProfile ? userProfile.phone : ""}
                     </Text>
                 </View>
-                <View style={{ marginTop: 80 }}>
+                <View style={{ marginTop: 30 }}>
                     <Button title={"Sign Out"} onPress={() => [
                         AsyncStorage.removeItem("jwt"),
                         logoutUser(context.dispatch)
@@ -101,14 +106,22 @@ const UserProfile = (props) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: "center"
+        alignItems: "center",
     },
     subContainer: {
         alignItems: "center",
-        marginTop: 60
+        marginTop: 60,
+        marginLeft: 50
+
+    },
+    profileImage: {
+        width: 150,
+        height: 150,
+        borderRadius: 75,
+        marginBottom: 20
     },
     order: {
-        marginTop: 20,
+        marginTop: 50,
         alignItems: "center",
         marginBottom: 60
     }
