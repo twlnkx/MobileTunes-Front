@@ -29,7 +29,6 @@ const Orders = (props) => {
 
     //  delete Order
     const deleteOrder = (id) => {
-        // Ensure token is available here, e.g., from AsyncStorage or passed state
         AsyncStorage.getItem("jwt").then((token) => {
             axios
                 .delete(`${baseURL}orders/${id}`, {
