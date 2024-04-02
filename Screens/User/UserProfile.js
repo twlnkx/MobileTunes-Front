@@ -83,25 +83,25 @@ const UserProfile = (props) => {
                         logoutUser(context.dispatch)
                     ]} />
                 </View>
-                    
-                    <View style={{ marginTop: 30 }}>
-                {/* <View style={styles.buttonContainer}>
-                    <Button title={"Update Profile"} onPress={() => navigation.navigate("UpdateProfile")} />
-                </View> */}
 
-                    <View style={styles.order}>
-                        <Text style={{ fontSize: 20 }}>My Orders</Text>
-                        <View>
-                            {orders ? (
-                                orders.map((order) => {
-                                    return <OrderCard key={order.id} item={order} select="false" />;
-                                })
-                            ) : (
-                                <View style={styles.order}>
-                                    <Text>You have no orders</Text>
-                                </View>
-                            )}
-                        </View>
+                <View style={{ marginTop: 30 }}>
+                    <View style={styles.buttonContainer}>
+                        <Button title={"Edit Profile"} onPress={() => navigation.navigate("UpdateProfile")} />
+                    </View>
+                </View>
+
+                <View style={styles.order}>
+                    <Text style={{ fontSize: 20 }}>My Orders</Text>
+                    <View>
+                        {orders ? (
+                            orders.map((order) => {
+                                return <OrderCard key={order.id} item={order} select="false" />;
+                            })
+                        ) : (
+                            <View style={styles.order}>
+                                <Text>You have no orders</Text>
+                            </View>
+                        )}
                     </View>
                 </View>
 
@@ -131,6 +131,9 @@ const styles = StyleSheet.create({
         marginTop: 50,
         alignItems: "center",
         marginBottom: 60
+    },
+    buttonContainer: {
+        marginBottom: 20
     }
 })
 
