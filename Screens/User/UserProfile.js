@@ -5,7 +5,7 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native"
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
-import axios from "axios"
+import axios from 'axios'
 import baseURL from "../../assets/common/baseurl"
 
 import AuthGlobal from "../../Context/Store/AuthGlobal"
@@ -82,6 +82,13 @@ const UserProfile = (props) => {
                         AsyncStorage.removeItem("jwt"),
                         logoutUser(context.dispatch)
                     ]} />
+                </View>
+                    
+                    <View style={{ marginTop: 30 }}>
+                {/* <View style={styles.buttonContainer}>
+                    <Button title={"Update Profile"} onPress={() => navigation.navigate("UpdateProfile")} />
+                </View> */}
+
                     <View style={styles.order}>
                         <Text style={{ fontSize: 20 }}>My Orders</Text>
                         <View>

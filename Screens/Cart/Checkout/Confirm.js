@@ -5,7 +5,7 @@ import { Text, HStack, VStack, Avatar, Spacer, Center } from "native-base";
 import { clearCart } from "../../../Redux/Actions/cartActions";
 import Icon from 'react-native-vector-icons/FontAwesome'
 import Toast from "react-native-toast-message";
-import axios from "axios";
+import axios from 'axios';
 import baseURL from "../../../assets/common/baseurl";
 import { useNavigation } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux'

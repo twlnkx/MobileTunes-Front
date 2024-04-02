@@ -66,3 +66,12 @@ export const setCurrentUser = (decoded, user) => {
         userProfile: user
     }
 }
+
+// export const updateUser = async (userData) => {
+//     try {
+//       const response = await axios.put(`your_update_user_endpoint/${userData.id}`, userData);
+//       return response.data;
+//     } catch (error) {
+//       throw error;
+//     }
+//   };

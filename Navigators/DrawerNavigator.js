@@ -1,5 +1,4 @@
-import * as React from "react";
-
+import React from "react";
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
@@ -7,171 +6,100 @@ import {
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import {
   NativeBaseProvider,
-  Button,
   Box,
-  HamburgerIcon,
-  Pressable,
-  Heading,
   VStack,
   Text,
-  Center,
+  Pressable,
+  Icon,
   HStack,
   Divider,
-  Icon,
 } from "native-base";
-import ProductContainer from "../Screens/Product/ProductContainer";
-import 'react-native-gesture-handler';
-import Login from "../Screens/User/Login";
-import Main from "./Main";
-import Cart from "../Screens/Cart/Cart";
-import Products from "../Screens/Admin/Products";
-import AdminNavigator from "./AdminNavigator";
-import ProductList from "../Screens/Product/ProductList";
-global.__reanimatedWorkletInit = () => { };
-const Drawer = createDrawerNavigator();
+import { useNavigation } from "@react-navigation/native";
+import { useContext } from "react";
+import AuthGlobal from "../Context/Store/AuthGlobal";
 
+// Import your screen components here
+import Main from "./Main";
+import Products from "../Screens/Admin/Products";
+import Cart from "../Screens/Cart/Cart";
+import Login from "../Screens/User/Login";
+import ProductContainer from "../Screens/Product/ProductContainer";
+
+const Drawer = createDrawerNavigator();
 
 const getIcon = (screenName) => {
   switch (screenName) {
-    case "Inbox":
-      return "email";
-    case "Outbox":
-      return "send";
+    case "Home":
+      return "home";
+    case "Products":
+      return "archive";
     case "Cart":
       return "cart";
-    case "Product List":
-      return "archive";
-    case "Trash":
-      return "trash-can";
-    case "Spam":
-      return "alert-circle";
+    case "Login":
+      return "login";
     default:
       return undefined;
   }
 };
 
-function CustomDrawerContent(props) {
+function CustomDrawerContent({ navigation, state }) {
+  const context = useContext(AuthGlobal);
+  const { stateUser } = useContext(AuthGlobal);
   return (
-    <DrawerContentScrollView {...props} safeArea>
+    <DrawerContentScrollView>
       <VStack space="6" my="2" mx="1">
-        <Box px="4">
-          <Text bold color="gray.700">
-            Mail
-          </Text>
-          <Text fontSize="14" mt="1" color="gray.500" fontWeight="500">
-            john_doe@gmail.com
-          </Text>
-        </Box>
-        <VStack divider={<Divider />} space="4">
-          <VStack space="3">
-            {props.state.routeNames.map((name, index) => (
-              <Pressable
-                px="5"
-                py="3"
-                rounded="md"
-                bg={
-                  index === props.state.index
-                    ? "rgba(6, 182, 212, 0.1)"
-                    : "transparent"
-                }
-                onPress={(event) => {
-                  props.navigation.navigate(name);
-                }}
+        {state.routeNames.map((name, index) => (
+          <Pressable
+            key={name}
+            px="5"
+            py="3"
+            rounded="md"
+            bg={
+              index === state.index
+                ? "rgba(6, 182, 212, 0.1)"
+                : "transparent"
+            }
+            onPress={() => navigation.navigate(name)}
+          >
+            <HStack space="7" alignItems="center">
+              <Icon
+                color={index === state.index ? "primary.500" : "gray.500"}
+                size="5"
+                as={<MaterialCommunityIcons name={getIcon(name)} />}
+              />
+              <Text
+                fontWeight="500"
+                color={index === state.index ? "primary.500" : "gray.700"}
               >
-                <HStack space="7" alignItems="center">
-                  <Icon
-                    color={
-                      index === props.state.index ? "primary.500" : "gray.500"
-                    }
-                    size="5"
-                    as={<MaterialCommunityIcons name={getIcon(name)} />}
-                  />
-                  <Text
-                    fontWeight="500"
-                    color={
-                      index === props.state.index ? "primary.500" : "gray.700"
-                    }
-                  >
-                    {name}
-                  </Text>
-                </HStack>
-              </Pressable>
-            ))}
-          </VStack>
-          <VStack space="5">
-            <Text fontWeight="500" fontSize="14" px="5" color="gray.500">
-              Labels
-            </Text>
-            <VStack space="3">
-              <Pressable px="5" py="3">
-                <HStack space="7" alignItems="center">
-                  <Icon
-                    color="gray.500"
-                    size="5"
-                    as={<MaterialCommunityIcons name="bookmark" />}
-                  />
-                  <Text color="gray.700" fontWeight="500">
-                    Family
-                  </Text>
-                </HStack>
-              </Pressable>
-              <Pressable px="5" py="2">
-                <HStack space="7" alignItems="center">
-                  <Icon
-                    color="gray.500"
-                    size="5"
-                    as={<MaterialCommunityIcons name="bookmark" />}
-                  />
-                  <Text color="gray.700" fontWeight="500">
-                    Friends
-                  </Text>
-                </HStack>
-              </Pressable>
-              <Pressable px="5" py="3">
-                <HStack space="7" alignItems="center">
-                  <Icon
-                    color="gray.500"
-                    size="5"
-                    as={<MaterialCommunityIcons name="bookmark" />}
-                  />
-                  <Text fontWeight="500" color="gray.700">
-                    Work
-                  </Text>
-                </HStack>
-              </Pressable>
-            </VStack>
-          </VStack>
-        </VStack>
+                {name === "Login" ? (
+                  context.stateUser.isAuthenticated ? "Logout" : "Login"
+                ) : (
+                  name
+                )}
+              </Text>
+            </HStack>
+          </Pressable>
+        ))}
       </VStack>
     </DrawerContentScrollView>
   );
 }
+
 const DrawerNavigator = () => {
+  
+
   return (
     <Box safeArea flex={1}>
       <Drawer.Navigator
         drawerContent={(props) => <CustomDrawerContent {...props} />}
       >
-        <Drawer.Screen
-          name="Home"
-          options={{
-            drawerLabel: 'Home',
-            title: 'Home Screen',
-          }}
-          component={Main}
-        />
-         {/* <Drawer.Screen name="drawer" component={Main} /> */}
-        {/* <Drawer.Screen name="Products" component={ProductContainer}   />
-        <Drawer.Screen name="Login" component={Login}  />
+        <Drawer.Screen name="Home" component={Main} />
+        {/* <Drawer.Screen name="Products" component={Products} /> */}
         <Drawer.Screen name="Cart" component={Cart} />
-        <Drawer.Screen name="Product List" component={Products} />  */}
-        <Drawer.Screen name="Products" component={Main} initialParams={{ screen: 'Products' }} />
-        <Drawer.Screen name="Login" component={Main} initialParams={{ screen: 'User' }} />
-         <Drawer.Screen name="Cart" component={Main} initialParams={{ screen: 'Cart' }} />
-        <Drawer.Screen name="Product List" component={Main}  initialParams={{ screen: 'Admin' }}/>
-
+        <Drawer.Screen name="Login" component={Login} />
       </Drawer.Navigator>
     </Box>
   );
-}
-export default DrawerNavigator
+};
+
+export default DrawerNavigator;

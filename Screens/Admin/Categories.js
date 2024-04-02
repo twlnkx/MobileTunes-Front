@@ -58,7 +58,7 @@ const Categories = () => {
       quality: 1,
     });
 
-    if (!result.cancelled) {
+    if (!result.canceled) {
       const selectedImage = result.assets[0];
       setCategoryImage(selectedImage);
     }

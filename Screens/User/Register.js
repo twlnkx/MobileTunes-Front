@@ -6,7 +6,7 @@ import { Button, Center } from "native-base";
 import FormContainer from "../../Shared/Form/FormContainer";
 import Input from "../../Shared/Form/Input";
 import Error from "../../Shared/Error";
-import axios from "axios";
+import axios from 'axios';
 import baseURL from "../../assets/common/baseurl";
 import Toast from "react-native-toast-message";
 import Icon from "react-native-vector-icons/FontAwesome"

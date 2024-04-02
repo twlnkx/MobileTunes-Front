@@ -7,7 +7,7 @@
   import Toast from "react-native-toast-message";
 
   import AsyncStorage from '@react-native-async-storage/async-storage'
-  import axios from "axios";
+  import axios from 'axios';
   import baseURL from "../assets/common/baseurl";
   import { useNavigation } from '@react-navigation/native'
   import Orders from "../Screens/Admin/Orders";
