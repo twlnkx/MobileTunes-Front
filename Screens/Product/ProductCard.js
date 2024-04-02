@@ -37,7 +37,7 @@ const ProductCard = (props) => {
                 <View style={{ marginBottom: 60 }}>
                     <Button
                         title={'Add'}
-                        color={'green'}
+                        color={'black'}
                         onPress={() => {
                             dispatch(addToCart({ ...props, quantity: 1, })),
                                 Toast.show({
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         alignItems: 'center',
         elevation: 8,
-        backgroundColor: 'white'
+        backgroundColor: 'pink'
     },
     image: {
         width: width / 2 - 20 - 10,
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     card: {
         marginBottom: 10,
         height: width / 2 - 20 - 90,
-        backgroundColor: 'transparent',
+        backgroundColor: 'white',
         width: width / 2 - 20 - 10
     },
     title: {
@@ -87,9 +87,9 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     price: {
-        fontSize: 20,
-        color: 'orange',
-        marginTop: 10
+        fontSize: 30,
+        color: 'red',
+        marginTop: 5.5
     }
 })
 

@@ -114,6 +114,7 @@ const Checkout = (props) => {
                     onValueChange={(e) => setCountry(e)}
 
                 >
+                    
                     {countries.map((c) => {
                         return <Select.Item
                             key={c.code}
@@ -123,9 +124,10 @@ const Checkout = (props) => {
                     })}
                 </Select>
                
-                <View style={{ width: '80%', alignItems: "center" }}>
-                    <Button title="Confirm" onPress={() => checkOut()} />
+                <View style={{ width: '80%', alignItems: "center", marginTop: 20 }}>
+                 <Button title="Confirm" onPress={() => checkOut()} />
                 </View>
+
             </FormContainer>
         </KeyboardAwareScrollView>
 

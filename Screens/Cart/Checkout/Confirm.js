@@ -67,8 +67,8 @@ const Confirm = (props) => {
     return (
         <Center>
             <ScrollView contentContainerStyle={styles.container}>
-                <View style={styles.titleContainer}>
-                    <Text style={{ fontSize: 20, fontWeight: "bold" }}>Confirm Order</Text>
+            <View style={{ marginTop: 40, justifyContent: 'center', alignItems: 'center' }}>
+                         <Text style={{ fontSize: 20, fontWeight: "bold" }}>Confirm Order</Text>
                     {props.route.params ? (
                         <View style={{ borderWidth: 1, borderColor: "orange" }}>
                             <Text style={styles.title}>Shipping to:</Text>
@@ -108,7 +108,7 @@ const Confirm = (props) => {
                             })}
                         </View>
                     ) : null}
-                    <View style={{ alignItems: "center", margin: 20 }}>
+                    <View style={{ alignItems: "center", margin: 100 }}>
                         <Button
                             title={"Place order"}
                             onPress={confirmOrder}

@@ -56,11 +56,12 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     active: {
-        backgroundColor: '#03bafc'
+        backgroundColor: 'pink' // Change to pink
     },
     inactive: {
-        backgroundColor: '#a0e1eb'
+        backgroundColor: 'black' // Change to black
     }
 })
+
 
 export default CategoryFilter;

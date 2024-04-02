@@ -42,12 +42,12 @@ const Payment = ({ route }) => {
     console.log(order)
     const navigation = useNavigation()
     return (
-        <Center  >
-            <Heading>
-                <Text>Choose your payment method</Text>
-            </Heading>
+        <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 4 }}>
+        <Heading fontSize="35">
+            <Text>Choose your payment method</Text>
+        </Heading>
 
-            <HStack bg="red.200" width="100%"  >
+            <HStack bg="pink" width="100%"  >
                 <Radio.Group
                     name="myRadioGroup"
                     value={selected}
@@ -62,7 +62,7 @@ const Payment = ({ route }) => {
                             <Radio
                                 key={index}
                                 value={item.value} my="1"
-                                colorScheme="green"
+                                colorScheme="pink"
                                 size="22"
                                 style={{ float: 'right' }}
                                 icon={<CheckCircleIcon size="22" mt="0.5" color="emerald.500" />}
@@ -76,7 +76,7 @@ const Payment = ({ route }) => {
                 </Radio.Group>
             </HStack>
             {selected === 3 ? (
-                <Box>
+                <Box marginTop={4}>
                     <Select
                         minWidth="100%"
                         placeholder="Choose Service"
@@ -105,7 +105,7 @@ const Payment = ({ route }) => {
                     title={"Confirm"}
                     onPress={() => navigation.navigate("Confirm", { order: order })} />
             </View>
-        </Center>
+         </View>
     )
 }
 export default Payment;
