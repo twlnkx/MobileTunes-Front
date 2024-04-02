@@ -1,17 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import EasyButton from '../../Shared/StyledComponents/EasyButton';
 import baseURL from '../../assets/common/baseurl';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as ImagePicker from 'expo-image-picker';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
-const Categories = () => {
+const EditCategory = () => {
   const [categoryName, setCategoryName] = useState('');
   const [categoryImage, setCategoryImage] = useState(null);
   const [token, setToken] = useState('');
   const navigation = useNavigation();
+  const route = useRoute();
+  const { category } = route.params;
 
   useEffect(() => {
     AsyncStorage.getItem('jwt')
@@ -21,7 +23,12 @@ const Categories = () => {
       .catch(error => console.log(error));
   }, []);
 
-  const addCategory = async () => {
+  useEffect(() => {
+    // Set initial category name when component mounts
+    setCategoryName(category.name);
+  }, []);
+
+  const updateCategory = async () => {
     const config = {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -41,12 +48,12 @@ const Categories = () => {
     }
 
     try {
-      const response = await axios.post(`${baseURL}categories`, formData, config);
+      const response = await axios.put(`${baseURL}categories/${category._id}`, formData, config);
       console.log(response.data);
-      setCategoryName('');
-      setCategoryImage(null);
+      // Navigate back to the previous screen after successful update
+      navigation.goBack();
     } catch (error) {
-      console.error('Error adding category:', error);
+      console.error('Error updating category:', error);
     }
   };
 
@@ -58,7 +65,7 @@ const Categories = () => {
       quality: 1,
     });
 
-    if (!result.cancelled) {
+    if (!result.canceled) {
       const selectedImage = result.assets[0];
       setCategoryImage(selectedImage);
     }
@@ -66,30 +73,24 @@ const Categories = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Add New Category</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Category Name"
-        value={categoryName}
-        onChangeText={text => setCategoryName(text)}
-      />
-      <TouchableOpacity style={styles.imagePicker} onPress={pickImage}>
-        {categoryImage ? (
-          <Image source={{ uri: categoryImage.uri }} style={{ width: 200, height: 200 }} />
-        ) : (
-          <Text>Select Image</Text>
-        )}
-      </TouchableOpacity>
-      <EasyButton primary large onPress={addCategory}>
-        <Text style={styles.buttonText}>Add Category</Text>
-      </EasyButton>
-      <EasyButton
-        secondary
-        medium
-        onPress={() => navigation.navigate('CategoriesList')}
-        style={{ marginTop: 20 }}
-      >
-        <Text style={styles.buttonText}>See Categories</Text>
+      <Text style={styles.title}>Edit Category</Text>
+      <View style={styles.form}>
+        <TextInput
+          style={styles.input}
+          placeholder="Category Name"
+          value={categoryName}
+          onChangeText={text => setCategoryName(text)}
+        />
+        <TouchableOpacity style={styles.imagePicker} onPress={pickImage}>
+          {categoryImage ? (
+            <Image source={{ uri: categoryImage.uri }} style={{ width: 200, height: 200 }} />
+          ) : (
+            <Text>Select Image</Text>
+          )}
+        </TouchableOpacity>
+      </View>
+      <EasyButton primary large onPress={updateCategory}>
+        <Text style={styles.buttonText}>Update Category</Text>
       </EasyButton>
     </View>
   );
@@ -106,8 +107,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 20,
   },
-  input: {
+  form: {
     width: '80%',
+    marginBottom: 20,
+  },
+  input: {
+    width: '100%',
     height: 40,
     borderColor: 'gray',
     borderWidth: 1,
@@ -116,7 +121,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   imagePicker: {
-    width: '80%',
+    width: '100%',
     height: 200,
     justifyContent: 'center',
     alignItems: 'center',
@@ -130,4 +135,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Categories;
+export default EditCategory;
