@@ -137,7 +137,7 @@ const Products = (props) => {
                     medium
                     onPress={() => navigation.navigate("Orders")}
                 >
-                    <Icon name="shopping-bag" size={18} color="white" />
+                    <Icon name="shopping-bag" size={18} color="black" />
                     <Text style={styles.buttonText}>Orders</Text>
                 </EasyButton>
                 <EasyButton
@@ -145,7 +145,7 @@ const Products = (props) => {
                     medium
                     onPress={() => navigation.navigate("ProductForm")}
                 >
-                    <Icon name="plus" size={18} color="white" />
+                    <Icon name="plus" size={18} color="black" />
                     <Text style={styles.buttonText}>Products</Text>
                 </EasyButton>
                 <EasyButton
@@ -153,7 +153,7 @@ const Products = (props) => {
                     medium
                     onPress={() => navigation.navigate("Categories")}
                 >
-                    <Icon name="plus" size={18} color="white" />
+                    <Icon name="plus" size={18} color="black" />
                     <Text style={styles.buttonText}>Categories</Text>
                 </EasyButton>
             </View>
@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
     listHeader: {
         flexDirection: 'row',
         padding: 5,
-        backgroundColor: 'gainsboro'
+        backgroundColor: 'pink'
     },
     headerItem: {
         margin: 3,
