@@ -1,21 +1,22 @@
 import React, { useState, useEffect } from "react";
-import { Image, View, StyleSheet, Text, ScrollView, Button, TextInput, TouchableOpacity, ActivityIndicator } from "react-native";
+import { Image, View, StyleSheet, Text, ScrollView, Button, TextInput, TouchableOpacity } from "react-native";
 import { Center, Heading } from 'native-base';
 import EasyButton from "../../Shared/StyledComponents/EasyButton";
 import TrafficLight from '../../Shared/StyledComponents/TrafficLight';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { FontAwesome5 } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
 
 const SingleProduct = ({ route }) => {
     const [item, setItem] = useState(route.params.item);
     const [availability, setAvailability] = useState('');
     const [availabilityText, setAvailabilityText] = useState("");
-    const [reviews, setReviews] = useState([]);
-    const [newReview, setNewReview] = useState("");
+    const [comments, setComments] = useState([]);
+    const [newComment, setNewComment] = useState("");
     const [editingIndex, setEditingIndex] = useState(null);
-    const [loading, setLoading] = useState(true); // State for loading indicator
+    const [ratings, setRatings] = useState([]);
 
     useEffect(() => {
+        // Determine availability
         if (item.countInStock === 0) {
             setAvailability(<TrafficLight unavailable />);
             setAvailabilityText("Unavailable");
@@ -27,62 +28,85 @@ const SingleProduct = ({ route }) => {
             setAvailabilityText("Available");
         }
 
-        loadReviews();
+        // Load comments and ratings from AsyncStorage on component mount
+        loadComments();
 
+        // Cleanup function
         return () => {
             setAvailability(null);
             setAvailabilityText("");
         };
     }, []);
 
-    const loadReviews = async () => {
+    // Function to load comments and ratings from AsyncStorage
+    const loadComments = async () => {
         try {
-            const reviewsData = await AsyncStorage.getItem("reviews");
-            if (reviewsData !== null) {
-                setReviews(JSON.parse(reviewsData));
+            const commentsData = await AsyncStorage.getItem("comments");
+            if (commentsData !== null) {
+                setComments(JSON.parse(commentsData));
+                // Initialize ratings with default values if not present
+                const defaultRatings = Array(JSON.parse(commentsData).length).fill(0);
+                setRatings(defaultRatings);
             }
         } catch (error) {
-            console.error("Error loading reviews: ", error);
-        } finally {
-            setLoading(false); // Set loading to false after reviews are loaded
+            console.error("Error loading comments: ", error);
         }
     };
 
-    const addReview = async () => {
-        if (newReview.trim() !== "") {
-            const updatedReviews = [...reviews, newReview];
-            setReviews(updatedReviews);
-            setNewReview("");
-            await AsyncStorage.setItem("reviews", JSON.stringify(updatedReviews));
+    // Function to handle adding a new comment along with rating
+    const handleCommentAction = async () => {
+        if (newComment.trim() !== "") {
+            const currentTime = new Date().toLocaleString(); // Get current time in a readable format
+            const commentWithTime = `${newComment} - ${currentTime}`; // Combine comment with time
+    
+            if (editingIndex !== null) {
+                // Remove original timestamp and add current time when editing existing comment
+                const updatedComment = `${newComment} - ${currentTime}`;
+                
+                // Update existing comment and rating
+                const updatedComments = [...comments];
+                updatedComments[editingIndex] = updatedComment;
+                setComments(updatedComments);
+                setEditingIndex(null);
+                setNewComment(""); // Clear the input field
+                await AsyncStorage.setItem("comments", JSON.stringify(updatedComments));
+            } else {
+                // Add new comment and rating with current time
+                const updatedComments = [...comments, commentWithTime];
+                setComments(updatedComments);
+                setNewComment(""); // Clear the input field
+                const updatedRatings = [...ratings, 0]; // Assuming default rating is 0
+                setRatings(updatedRatings);
+                await AsyncStorage.setItem("comments", JSON.stringify(updatedComments));
+            }
         }
     };
+    
+    
 
-    const editReview = (index, review) => {
+
+    // Function to handle editing a comment
+    const editComment = (index) => {
+        setNewComment(comments[index]);
         setEditingIndex(index);
-        setNewReview(review);
     };
 
-    const updateReview = async (index) => {
-        if (newReview.trim() !== "") {
-            const updatedReviews = [...reviews];
-            updatedReviews[index] = newReview.trim();
-            setReviews(updatedReviews);
-            setNewReview("");
-            setEditingIndex(null);
-            await AsyncStorage.setItem("reviews", JSON.stringify(updatedReviews));
-        }
+    // Function to handle deleting a comment
+    const deleteComment = async (index) => {
+        const updatedComments = [...comments];
+        updatedComments.splice(index, 1);
+        setComments(updatedComments);
+        const updatedRatings = [...ratings];
+        updatedRatings.splice(index, 1);
+        setRatings(updatedRatings);
+        await AsyncStorage.setItem("comments", JSON.stringify(updatedComments));
     };
 
-    const cancelEdit = () => {
-        setNewReview("");
-        setEditingIndex(null);
-    };
-
-    const deleteReview = async (index) => {
-        const updatedReviews = [...reviews];
-        updatedReviews.splice(index, 1);
-        setReviews(updatedReviews);
-        await AsyncStorage.setItem("reviews", JSON.stringify(updatedReviews));
+    // Function to handle updating a star rating
+    const updateRating = (index, rating) => {
+        const updatedRatings = [...ratings];
+        updatedRatings[index] = rating;
+        setRatings(updatedRatings);
     };
 
     return (
@@ -110,58 +134,56 @@ const SingleProduct = ({ route }) => {
                     </View>
                     <Text>{item.description}</Text>
                 </View>
+    
+                {/* Render Comments */}
+                <View style={styles.commentsContainer}>
+                    <Text style={styles.commentsHeader}>Comments</Text>
+                    {comments.map((comment, index) => (
+                        <View key={index} style={styles.commentWrapper}>
+                            <View style={styles.commentContainer}>
+                                <Text style={styles.comment}>{comment}</Text>
+                                <View style={styles.commentActions}>
+                                    <TouchableOpacity onPress={() => editComment(index)}>
+                                        <FontAwesome name="edit" size={20} color="blue" style={styles.actionIcon} />
+                                    </TouchableOpacity>
+                                    <TouchableOpacity onPress={() => deleteComment(index)}>
+                                        <FontAwesome name="trash" size={20} color="red" style={styles.actionIcon} />
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                            {/* Star Rating */}
+                            <View style={styles.starRatingContainer}>
+                                {[1, 2, 3, 4, 5].map((star) => (
+                                    <TouchableOpacity
+                                        key={star}
+                                        onPress={() => updateRating(index, star)}
+                                    >
+                                        <FontAwesome
+                                            name={star <= ratings[index] ? 'star' : 'star-o'}
+                                            size={24}
+                                            color={star <= ratings[index] ? 'gold' : '#ccc'}
+                                            style={styles.starIcon}
+                                        />
+                                    </TouchableOpacity>
+                                ))}
+                            </View>
+                        </View>
+                    ))}
+                </View>
+    
+                <TextInput
+                    style={styles.input}
+                    placeholder="Add a comment"
+                    value={newComment}
+                    onChangeText={(text) => setNewComment(text)}
+                />
                 <EasyButton
                     primary
                     medium
+                    onPress={handleCommentAction}
                 >
-                    <Text style={{ color: "white" }}> Add</Text>
+                    <Text style={{ color: "white" }}>{editingIndex !== null ? 'Update' : 'Add'}</Text>
                 </EasyButton>
-
-                <View style={styles.reviewsContainer}>
-                    <Text style={styles.reviewsHeader}>Reviews</Text>
-                    {loading ? (
-                        <ActivityIndicator size="small" color="#000" />
-                    ) : (
-                        <>
-                            {reviews.map((review, index) => (
-                                <View key={index} style={styles.reviewContainer}>
-                                    {index === editingIndex ? (
-                                        <View style={{ flex: 1 }}>
-                                            <TextInput
-                                                style={styles.input}
-                                                value={newReview}
-                                                onChangeText={(text) => setNewReview(text)}
-                                            />
-                                            <View style={{ flexDirection: 'row' }}>
-                                                <Button title="Update" onPress={() => updateReview(index)} />
-                                                <Button title="Cancel" onPress={cancelEdit} />
-                                            </View>
-                                        </View>
-                                    ) : (
-                                        <>
-                                            <Text style={styles.review}>{review}</Text>
-                                            <View style={styles.reviewActions}>
-                                                <TouchableOpacity onPress={() => editReview(index, review)}>
-                                                    <FontAwesome5 name="edit" size={20} color="blue" style={styles.actionIcon} />
-                                                </TouchableOpacity>
-                                                <TouchableOpacity onPress={() => deleteReview(index)}>
-                                                    <FontAwesome5 name="trash-alt" size={20} color="red" style={styles.actionIcon} />
-                                                </TouchableOpacity>
-                                            </View>
-                                        </>
-                                    )}
-                                </View>
-                            ))}
-                            <TextInput
-                                style={styles.input}
-                                placeholder="Add a review"
-                                value={newReview}
-                                onChangeText={(text) => setNewReview(text)}
-                            />
-                            <Button title="Add Review" onPress={addReview} />
-                        </>
-                    )}
-                </View>
             </ScrollView>
         </Center>
     )
@@ -174,7 +196,7 @@ const styles = StyleSheet.create({
         aspectRatio: 1
     },
     contentContainer: {
-        marginTop: 20,
+        marginTop: 0,
         justifyContent: 'center',
         alignItems: 'center'
     },
@@ -195,25 +217,33 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginBottom: 10,
     },
-    reviewsContainer: {
+    commentsContainer: {
         marginBottom: 20,
     },
-    reviewsHeader: {
+    commentsHeader: {
         fontSize: 20,
         fontWeight: 'bold',
         marginBottom: 10,
     },
-    reviewContainer: {
+    commentWrapper: {
+        borderWidth: 1,
+        borderColor: '#ccc',
+        padding: 10,
+        marginBottom: 10,
+        borderRadius: 8,
+        backgroundColor: '#f9f9f9',
+    },
+    commentContainer: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
         alignItems: 'center',
+        justifyContent: 'space-between',
         marginBottom: 5,
     },
-    review: {
+    comment: {
         flex: 1,
-        marginBottom: 5,
+        marginRight: 10,
     },
-    reviewActions: {
+    commentActions: {
         flexDirection: 'row',
     },
     actionIcon: {
@@ -224,6 +254,13 @@ const styles = StyleSheet.create({
         borderColor: '#ccc',
         padding: 10,
         marginBottom: 10,
+    },
+    starRatingContainer: {
+        flexDirection: 'row',
+        marginTop: 5,
+    },
+    starIcon: {
+        marginRight: 5,
     },
 });
 

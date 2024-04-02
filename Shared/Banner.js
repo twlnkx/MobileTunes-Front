@@ -9,9 +9,9 @@ const Banner = () => {
 
     useEffect(() => {
         setBannerData([
-            "https://images.vexels.com/media/users/3/126443/preview2/ff9af1e1edfa2c4a46c43b0c2040ce52-macbook-pro-touch-bar-banner.jpg",
-            "https://pbs.twimg.com/media/D7P_yLdX4AAvJWO.jpg",
-            "https://www.yardproduct.com/blog/wp-content/uploads/2016/01/gardening-banner.jpg",
+            "https://t3.ftcdn.net/jpg/06/51/05/60/360_F_651056046_kPpWQYlaXSolgMALM88AYbt01izA2emc.jpg",
+            "https://png.pngtree.com/thumb_back/fh260/background/20230718/pngtree-musical-notes-and-headphones-concept-with-white-space-rendered-in-3d-image_3898902.jpg",
+            "https://png.pngtree.com/thumb_back/fh260/background/20230705/pngtree-d-illustration-of-abstract-blue-background-with-modern-headphones-ideal-for-image_3807815.jpg",
         ]);
 
         return () => {
