@@ -64,6 +64,10 @@ const Categories = () => {
     }
   };
 
+  const navigateToCharts = () => {
+    navigation.navigate('Charts');
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Add New Category</Text>
@@ -80,16 +84,24 @@ const Categories = () => {
           <Text>Select Image</Text>
         )}
       </TouchableOpacity>
-      <EasyButton primary large onPress={addCategory}>
+      <EasyButton primary large onPress={addCategory} style={styles.button}>
         <Text style={styles.buttonText}>Add Category</Text>
       </EasyButton>
       <EasyButton
         secondary
         medium
         onPress={() => navigation.navigate('CategoriesList')}
-        style={{ marginTop: 20 }}
+        style={styles.button}
       >
         <Text style={styles.buttonText}>See Categories</Text>
+      </EasyButton>
+      <EasyButton
+        secondary
+        medium
+        onPress={navigateToCharts}
+        style={styles.button}
+      >
+        <Text style={styles.buttonText}>See Charts</Text>
       </EasyButton>
     </View>
   );
@@ -125,8 +137,13 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: 20,
   },
+  button: {
+    width: '80%',
+    marginBottom: 10,
+  },
   buttonText: {
     color: 'white',
+    textAlign: 'center',
   },
 });
 
