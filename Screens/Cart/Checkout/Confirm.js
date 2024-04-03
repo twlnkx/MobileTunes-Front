@@ -70,16 +70,17 @@ const Confirm = (props) => {
             <View style={{ marginTop: 40, justifyContent: 'center', alignItems: 'center' }}>
                          <Text style={{ fontSize: 20, fontWeight: "bold" }}>Confirm Order</Text>
                     {props.route.params ? (
-                        <View style={{ borderWidth: 1, borderColor: "orange" }}>
-                            <Text style={styles.title}>Shipping to:</Text>
-                            <View style={{ padding: 8 }}>
-                                <Text>Address: {finalOrder.order.order.shippingAddress1}</Text>
-                                <Text>Address2: {finalOrder.order.order.shippingAddress2}</Text>
-                                <Text>City: {finalOrder.order.order.city}</Text>
-                                <Text>Zip Code: {finalOrder.order.order.zip}</Text>
-                                <Text>Country: {finalOrder.order.order.country}</Text>
-                            </View>
-                            <Text style={styles.title}>items</Text>
+                   <View style={{ borderWidth: 7, borderColor: "pink" }}>
+                   <Text style={styles.title}>Shipping to:</Text>
+                   <View style={{ marginVertical: 10, marginHorizontal: 100 }}>
+                       <Text style={[styles.textLeft]}>Address: {finalOrder.order.order.shippingAddress1}</Text>
+                       <Text style={[styles.textLeft]}>Address2: {finalOrder.order.order.shippingAddress2}</Text>
+                       <Text style={[styles.textLeft]}>City: {finalOrder.order.order.city}</Text>
+                       <Text style={[styles.textLeft]}>Zip Code: {finalOrder.order.order.zip}</Text>
+                       <Text style={[styles.textLeft]}>Country: {finalOrder.order.order.country}</Text>
+                   </View>
+             
+                    <Text style={styles.title}>items</Text>
 
                             {finalOrder.order.order.orderItems.map((item) => {
                                 return (
@@ -108,7 +109,7 @@ const Confirm = (props) => {
                             })}
                         </View>
                     ) : null}
-                    <View style={{ alignItems: "center", margin: 100 }}>
+                    <View style={{ alignItems: "center", margin: 20 }}>
                         <Button
                             title={"Place order"}
                             onPress={confirmOrder}
@@ -123,7 +124,7 @@ const Confirm = (props) => {
 const styles = StyleSheet.create({
     container: {
         height: height,
-        padding: 8,
+        padding: 20,
         alignContent: "center",
         backgroundColor: "white",
     },
